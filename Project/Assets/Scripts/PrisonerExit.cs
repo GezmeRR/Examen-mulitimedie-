@@ -36,7 +36,7 @@ public class PrisonerExit : MonoBehaviour {
             //different foe, different damage
             //health -= other.gameObject.damage;
             //same damage for all
-            health --;
+            damage++;
 
 
             score -= scorePenalty;
