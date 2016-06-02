@@ -24,15 +24,14 @@ public class PlayerMovement : MonoBehaviour {
     //public float fallAcceleration;
     public float fallSpeed;
     public float moveSpeed;
-
+    public string speedParameter = "Speed";
 
     public GameObject spawn;
 
-    public GameObject self;
-    public Rigidbody2D rbSelf;
-
-    public float ySpeed;
+    private float ySpeed;
+    private Rigidbody2D rbSelf;
     private BoxCollider2D col;
+    private Animator animator;
 
     protected Vector2 Center { get { return (Vector2)transform.position + Vector2.Scale(col.offset, transform.localScale); } }
     protected Vector2 Size { get { return Vector2.Scale(col.size, transform.localScale); } }
@@ -40,16 +39,19 @@ public class PlayerMovement : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
-        col = self.GetComponent<BoxCollider2D>();
+        col = GetComponent<BoxCollider2D>();
         rbSelf = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
 
         //Always start at spawn, no need to move player and spawn in editor
         transform.position = spawn.transform.position;
 
-
+        //If the spawn is plased as a child of the player, leave it behind
+        if (spawn.transform.parent == transform)
+            spawn.transform.SetParent(null, true);
 
         RaycastHit2D[] hit = Physics2D.BoxCastAll(Center, Size, 0, Vector2.down, groundOffset)
-            .Where(h => h.collider.gameObject != self && h.normal == Vector2.up)
+            .Where(h => h.collider.gameObject != gameObject && h.normal == Vector2.up)
             .ToArray();
 
         grounded = false;
@@ -67,7 +69,7 @@ public class PlayerMovement : MonoBehaviour {
 	void Update () {
 
         RaycastHit2D[] hit = Physics2D.BoxCastAll(Center, Size, 0, Vector2.down, groundOffset)
-        .Where(h => h.collider.gameObject != self && h.normal == Vector2.up)
+        .Where(h => h.collider.gameObject != gameObject && h.normal == Vector2.up)
         .ToArray();
 
         grounded = false;
@@ -78,8 +80,9 @@ public class PlayerMovement : MonoBehaviour {
         }
 
 
-        Vector2 position = self.transform.position;
+        Vector2 position = transform.position;
         position.x += Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
+        animator.SetInteger(speedParameter, (int)Input.GetAxisRaw("Horizontal"));
 
         if (Input.GetKey(KeyCode.W) && jumping < jumpMax)
         {
@@ -139,7 +142,7 @@ public class PlayerMovement : MonoBehaviour {
                     }
 
                     RaycastHit2D[] hit = Physics2D.BoxCastAll(Center, Size, 0, Vector2.down, groundOffset)
-                    .Where(h => h.collider.gameObject != self && h.normal == Vector2.up)
+                    .Where(h => h.collider.gameObject != gameObject && h.normal == Vector2.up)
                     .ToArray();
 
                     grounded = false;
