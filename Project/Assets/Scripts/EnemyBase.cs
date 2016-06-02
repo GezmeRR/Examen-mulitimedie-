@@ -44,8 +44,7 @@ public class EnemyBase : MonoBehaviour
         float fallDist = fallSpeed * Time.deltaTime;
         
         RaycastHit2D[] hit = Physics2D.BoxCastAll(Center, Size, 0, Vector2.down, fallDist)
-            .Where(h => h.collider.gameObject != gameObject && h.normal == Vector2.up
-                && !Physics2D.GetIgnoreLayerCollision(gameObject.layer, h.collider.gameObject.layer))
+            .Where(h => CanCollide(h.collider) && h.normal == Vector2.up)
             .ToArray();
 
         Grounded = false;
@@ -65,8 +64,7 @@ public class EnemyBase : MonoBehaviour
         Vector3 moveDir = direction ? Vector3.left : Vector3.right;
 
         RaycastHit2D[] hit = Physics2D.BoxCastAll(Center, Size, 0, moveDir, moveDist)
-            .Where(h => h.collider.gameObject != gameObject && h.normal == -(Vector2)moveDir
-                && !Physics2D.GetIgnoreLayerCollision(gameObject.layer, h.collider.gameObject.layer))
+            .Where(h => CanCollide(h.collider) && h.normal == -(Vector2)moveDir)
             .ToArray();
 
         if (hit.Length > 0)
@@ -76,5 +74,10 @@ public class EnemyBase : MonoBehaviour
         }
 
         transform.position += moveDist * moveDir;
+    }
+
+    protected bool CanCollide(Collider2D collider)
+    {
+        return collider.gameObject != gameObject && !collider.isTrigger && !Physics2D.GetIgnoreLayerCollision(gameObject.layer, collider.gameObject.layer);
     }
 }
