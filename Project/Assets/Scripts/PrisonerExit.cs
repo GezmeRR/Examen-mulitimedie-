@@ -21,8 +21,6 @@ public class PrisonerExit : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        player = GameObject.Find("PlayerCharacter");
-        self = GameObject.Find("PrisonerExit");
         col = gameObject.GetComponent<BoxCollider2D>();
     }
 
@@ -30,7 +28,7 @@ public class PrisonerExit : MonoBehaviour {
 
         RaycastHit2D hit = Physics2D.BoxCast(Center, Size, 0, Vector2.down, 10);
 
-        if (hit.transform.gameObject != player && hit.transform.gameObject != self)
+        if (!hit.collider.GetComponent<PlayerMovement>() && hit.collider.gameObject != gameObject)
         {
             Debug.Log("hit");
             other = hit.transform.gameObject;
