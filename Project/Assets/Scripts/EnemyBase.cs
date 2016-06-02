@@ -18,6 +18,7 @@ public class EnemyBase : MonoBehaviour
     protected Vector2 Size { get { return Vector2.Scale(col.size, transform.localScale); } }
 
     public int scoreVal;
+    public int scorePenalty;
 
     [Serializable]
     public struct AnimationParameters
