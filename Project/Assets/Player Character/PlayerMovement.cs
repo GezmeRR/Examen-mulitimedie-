@@ -57,9 +57,10 @@ public class PlayerMovement : MonoBehaviour
         if (invincible)
         {
             invTimer -= Time.deltaTime;
-            if(invTimer == 0)
+            if(invTimer <= 0)
             {
-                invincible = !invincible;
+                invincible = false;
+                Debug.Log("invincible off");
             }
         }
 
@@ -100,15 +101,9 @@ public class PlayerMovement : MonoBehaviour
             else
             {
                 jumping = jumpMax;
-                if (!invincible)
-                {
-                    foreach (EnemyBase enemy in enemies)
-                    {
-                        score -= enemy.gameObject.GetComponent<EnemyBase>().scorePenalty;
-                    }
-                    invincible = true;
-                    invTimer = invDuration;
-                }
+
+                if (enemies.Count > 0)
+                    Damage(enemies[0]);
             }
 
             movement.y = distanceTo;
@@ -116,15 +111,9 @@ public class PlayerMovement : MonoBehaviour
 
         if (BoxCast(Vector2.right, movement.x, out distanceTo, out enemies))
         {
-            if (!invincible)
-            {
-                foreach (EnemyBase enemy in enemies)
-                {
-                    score -= enemy.gameObject.GetComponent<EnemyBase>().scorePenalty;
-                }
-                invincible = true;
-                invTimer = invDuration;
-            }
+            if (enemies.Count > 0)
+                Damage(enemies[0]);
+
             movement.x = distanceTo;
         }
 
@@ -195,5 +184,15 @@ public class PlayerMovement : MonoBehaviour
         distanceTo = Mathf.Sign(dist) * hit.Min(h => h.distance);
         enemy = hit.Select(h => h.collider.GetComponent<EnemyBase>()).Where(e => e != null).ToList();
         return true;
+    }
+
+    private void Damage(EnemyBase enemy)
+    {
+        if (invincible) return;
+
+        score -= enemy.gameObject.GetComponent<EnemyBase>().scorePenalty;
+        invincible = true;
+        invTimer = invDuration;
+        Debug.Log("invincible");
     }
 }
