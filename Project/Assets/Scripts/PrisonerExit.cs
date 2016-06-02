@@ -39,6 +39,7 @@ public class PrisonerExit : MonoBehaviour {
 
             if (damage >= health)
             {
+                SaveFile.newScore = score;
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             }
             else

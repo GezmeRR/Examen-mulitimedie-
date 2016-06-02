@@ -7,6 +7,7 @@ using UnityEngine;
 [Serializable]
 public class SaveFile
 {
+    public static int newScore;
     public List<Score> scores = new List<Score>();
 
     [Serializable]
