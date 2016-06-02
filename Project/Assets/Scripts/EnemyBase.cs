@@ -8,10 +8,10 @@ public class EnemyBase : MonoBehaviour
     public bool direction;
 
     private BoxCollider2D col;
-    private bool grounded;
+    protected bool Grounded { get; private set; }
 
-    private Vector2 Center { get { return (Vector2)transform.position + Vector2.Scale(col.offset, transform.localScale); } }
-    private Vector2 Size { get { return Vector2.Scale(col.size, transform.localScale); } }
+    protected Vector2 Center { get { return (Vector2)transform.position + Vector2.Scale(col.offset, transform.localScale); } }
+    protected Vector2 Size { get { return Vector2.Scale(col.size, transform.localScale); } }
 
     void Start()
     {
@@ -32,18 +32,18 @@ public class EnemyBase : MonoBehaviour
             .Where(h => h.collider.gameObject != gameObject && h.normal == Vector2.up)
             .ToArray();
 
-        grounded = false;
+        Grounded = false;
 
         if (hit.Length > 0)
         {
             fallDist = hit[0].distance;
-            grounded = true;
+            Grounded = true;
         }
 
         transform.position += fallDist * Vector3.down;
     }
 
-    void Move()
+    protected virtual void Move()
     {
         float moveDist = speed * Time.deltaTime;
         Vector3 moveDir = direction ? Vector3.left : Vector3.right;
