@@ -1,11 +1,8 @@
 ﻿using UnityEngine;
 using System.Linq;
 
-public class PlayerMovement : MonoBehaviour {
-
-
-
-    
+public class PlayerMovement : MonoBehaviour
+{
     //distance from center to ground
     public float groundOffset;
     public bool grounded = false;
@@ -29,7 +26,7 @@ public class PlayerMovement : MonoBehaviour {
     public GameObject spawn;
 
     private float ySpeed;
-    private Rigidbody2D rbSelf;
+    //private Rigidbody2D rbSelf;
     private BoxCollider2D col;
     private Animator animator;
 
@@ -37,10 +34,10 @@ public class PlayerMovement : MonoBehaviour {
     protected Vector2 Size { get { return Vector2.Scale(col.size, transform.localScale); } }
 
     // Use this for initialization
-    void Start () {
-
+    void Start ()
+    {
         col = GetComponent<BoxCollider2D>();
-        rbSelf = GetComponent<Rigidbody2D>();
+        //rbSelf = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
 
         //Always start at spawn, no need to move player and spawn in editor
@@ -49,64 +46,45 @@ public class PlayerMovement : MonoBehaviour {
         //If the spawn is plased as a child of the player, leave it behind
         if (spawn.transform.parent == transform)
             spawn.transform.SetParent(null, true);
-
-        RaycastHit2D[] hit = Physics2D.BoxCastAll(Center, Size, 0, Vector2.down, groundOffset)
-            .Where(h => h.collider.gameObject != gameObject && h.normal == Vector2.up)
-            .ToArray();
-
-        grounded = false;
-
-        if (hit.Length > 0)
-        {
-            grounded = true;
-
-            jumping = jumpMax;
-        }
-
     }
 	
 	// Update is called once per frame
-	void Update () {
-
-        RaycastHit2D[] hit = Physics2D.BoxCastAll(Center, Size, 0, Vector2.down, groundOffset)
-        .Where(h => h.collider.gameObject != gameObject && h.normal == Vector2.up)
-        .ToArray();
-
-        grounded = false;
-
-        if (hit.Length > 0)
-        {
-            grounded = true;
-        }
-
-
-        Vector2 position = transform.position;
-        position.x += Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
+	void Update ()
+    {
+        Vector2 movement = Vector2.zero;
+        movement.x = Input.GetAxis("Horizontal") * moveSpeed;
         animator.SetInteger(speedParameter, (int)Input.GetAxisRaw("Horizontal"));
 
         if (Input.GetKey(KeyCode.W) && jumping < jumpMax)
         {
-            position.y += jumpVelocity * Time.deltaTime;
+            movement.y = jumpVelocity;
             jumping += jumpVelocity * Time.deltaTime;
-            Debug.Log("jump");
             
         }
-        if (Input.GetKeyUp(KeyCode.W))
+        else if (!grounded)
         {
             jumping = jumpMax;
+            movement.y = -jumpVelocity;
         }
 
+        movement *= Time.deltaTime;
+        float distanceTo;
 
-        if (grounded)
+        grounded = false;
+
+        if (BoxCast(Vector2.up, movement.y, out distanceTo))
         {
             jumping = 0;
+            movement.y = distanceTo;
+            grounded = true;
         }
-        else if (!grounded && Input.GetKey(KeyCode.W) == false || jumping >= jumpMax)
+
+        if (BoxCast(Vector2.right, movement.x, out distanceTo))
         {
-            position.y -= jumpVelocity * Time.deltaTime;
+            movement.x = distanceTo;
         }
 
-
+        transform.position += (Vector3)movement;
         
 
         
@@ -152,8 +130,24 @@ public class PlayerMovement : MonoBehaviour {
                         grounded = true;
                     }
                 }
-                */
-        rbSelf.MovePosition(position);
                 
+        rbSelf.MovePosition(position);
+                */
+    }
+
+    private bool BoxCast(Vector2 dir, float dist, out float distanceTo)
+    {
+        RaycastHit2D[] hit = Physics2D.BoxCastAll(Center, Size, 0, dir * Mathf.Sign(dist), Mathf.Abs(dist))
+        .Where(h => h.collider.gameObject != gameObject && h.normal == -dir * Mathf.Sign(dist))
+        .ToArray();
+
+        if (hit.Length == 0)
+        {
+            distanceTo = 0;
+            return false;
+        }
+
+        distanceTo = Mathf.Sign(dist) * hit.Min(h => h.distance);
+        return true;
     }
 }
