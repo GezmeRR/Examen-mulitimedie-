@@ -146,7 +146,7 @@ public class PlayerMovement : MonoBehaviour
     private bool BoxCast(Vector2 dir, float dist, out float distanceTo)
     {
         RaycastHit2D[] hit = Physics2D.BoxCastAll(Center, Size, 0, dir * Mathf.Sign(dist), Mathf.Abs(dist))
-        .Where(h => h.collider.gameObject != gameObject && h.normal == -dir * Mathf.Sign(dist))
+        .Where(h => h.collider.gameObject != gameObject && !h.collider.isTrigger && h.normal == -dir * Mathf.Sign(dist))
         .ToArray();
 
         if (hit.Length == 0)
