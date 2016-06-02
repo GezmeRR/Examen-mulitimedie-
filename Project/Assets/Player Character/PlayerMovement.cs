@@ -74,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (BoxCast(Vector2.up, movement.y, out distanceTo))
         {
-            jumping = 0;
+            jumping = movement.y < 0 ? 0 : jumpMax;
             movement.y = distanceTo;
             grounded = true;
         }
