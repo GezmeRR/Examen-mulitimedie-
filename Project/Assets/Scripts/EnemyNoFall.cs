@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class EnemyNoFall : EnemyBase
 {
+
+    public int scoreVal;
+
     protected override void Move()
     {
         if (Grounded)

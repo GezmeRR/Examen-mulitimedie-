@@ -17,6 +17,8 @@ public class EnemyBase : MonoBehaviour
     protected Vector2 Center { get { return (Vector2)transform.position + Vector2.Scale(col.offset, transform.localScale); } }
     protected Vector2 Size { get { return Vector2.Scale(col.size, transform.localScale); } }
 
+    public int scoreVal;
+
     [Serializable]
     public struct AnimationParameters
     {

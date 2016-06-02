@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-using System.Linq;
+﻿using System.Linq;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -70,14 +71,20 @@ public class PlayerMovement : MonoBehaviour
         movement *= Time.deltaTime;
         float distanceTo;
 
+        List<EnemyBase> enemies = new List<EnemyBase>();
         grounded = false;
 
-        if (BoxCast(Vector2.up, movement.y, out distanceTo))
+        if (BoxCast(Vector2.up, movement.y, out distanceTo, out enemies))
         {
             if (movement.y < 0)
             {
                 grounded = true;
                 jumping = 0;
+                foreach (EnemyBase enemy in enemies)
+                {
+                    score += enemy.gameObject.GetComponent<EnemyBase>().scoreVal;
+                    Destroy(enemy.gameObject);
+                }
             }
             else
             {
@@ -87,7 +94,7 @@ public class PlayerMovement : MonoBehaviour
             movement.y = distanceTo;
         }
 
-        if (BoxCast(Vector2.right, movement.x, out distanceTo))
+        if (BoxCast(Vector2.right, movement.x, out distanceTo, out enemies))
         {
             movement.x = distanceTo;
         }
@@ -143,7 +150,7 @@ public class PlayerMovement : MonoBehaviour
                 */
     }
 
-    private bool BoxCast(Vector2 dir, float dist, out float distanceTo)
+    private bool BoxCast(Vector2 dir, float dist, out float distanceTo, out List<EnemyBase> enemy)
     {
         RaycastHit2D[] hit = Physics2D.BoxCastAll(Center, Size, 0, dir * Mathf.Sign(dist), Mathf.Abs(dist))
         .Where(h => h.collider.gameObject != gameObject && !h.collider.isTrigger && h.normal == -dir * Mathf.Sign(dist))
@@ -152,10 +159,12 @@ public class PlayerMovement : MonoBehaviour
         if (hit.Length == 0)
         {
             distanceTo = 0;
+            enemy = null;
             return false;
         }
 
         distanceTo = Mathf.Sign(dist) * hit.Min(h => h.distance);
+        enemy = hit.Select(h => h.collider.GetComponent<EnemyBase>()).Where(e => e != null).ToList();
         return true;
     }
 }
