@@ -54,7 +54,7 @@ public class EnemyBase : MonoBehaviour
 
         if (hit.Length > 0)
         {
-            fallDist = hit[0].distance;
+            fallDist = hit.Min(h => h.distance);
             Grounded = true;
         }
 
@@ -66,7 +66,7 @@ public class EnemyBase : MonoBehaviour
         float moveDist = speed * Time.deltaTime;
         Vector3 moveDir = direction ? Vector3.left : Vector3.right;
 
-        RaycastHit2D[] hit = Physics2D.BoxCastAll(Center, Size, 0, moveDir, moveDist)
+        RaycastHit2D[] hit = Physics2D.BoxCastAll(Center, Vector2.Scale(Size, new Vector2(1, 0.8F)), 0, moveDir, moveDist)
             .Where(h => CanCollide(h.collider) && h.normal == -(Vector2)moveDir)
             .ToArray();
 

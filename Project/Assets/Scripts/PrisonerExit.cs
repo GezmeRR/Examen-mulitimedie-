@@ -3,16 +3,14 @@ using System.Collections;
 
 public class PrisonerExit : MonoBehaviour {
 
-    public GameObject player;
-    private GameObject self;
-    private GameObject other;
-
     public int health;
     public int damage;
 
     public int score;
     public int scorePenalty;
+    public AudioClip[] damageClips;
 
+    private AudioSource source;
     private BoxCollider2D col;
 
     protected Vector2 Center { get { return (Vector2)transform.position + Vector2.Scale(col.offset, transform.localScale); } }
@@ -21,6 +19,7 @@ public class PrisonerExit : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+        source = gameObject.GetComponent<AudioSource>();
         col = gameObject.GetComponent<BoxCollider2D>();
     }
 
@@ -31,15 +30,14 @@ public class PrisonerExit : MonoBehaviour {
         if (!hit.collider.GetComponent<PlayerMovement>() && hit.collider.gameObject != gameObject)
         {
             Debug.Log("hit");
-            other = hit.transform.gameObject;
-            Destroy(other.gameObject);
+            Destroy(hit.transform.gameObject);
             //different foe, different damage
             //health -= other.gameObject.damage;
             //same damage for all
             damage++;
-
-
             score -= scorePenalty;
+            source.clip = damageClips[Random.Range(0, damageClips.Length)];
+            source.Play();
         }
 	}
 }
