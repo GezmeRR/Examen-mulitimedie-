@@ -125,6 +125,7 @@ MonoBehaviour:
   grounded: 1
   score: 0
   lives: 0
+  invDuration: 1.5
   jumpMax: 3
   jumping: 0
   jumpVelocity: 7
