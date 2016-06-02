@@ -5,6 +5,7 @@ using System.Collections;
 public class Spawner : MonoBehaviour
 {
     public EnemyBase enemy;
+    public bool direction;
     public float spawnRate;
     public string timerParameter = "Timer";
 
@@ -25,6 +26,7 @@ public class Spawner : MonoBehaviour
     {
         animator.SetFloat(timerParameter, animator.GetFloat(timerParameter) + spawnRate);
         EnemyBase spawn = Instantiate(enemy);
+        spawn.direction = direction;
         spawn.transform.position = transform.position;
     }
 }
