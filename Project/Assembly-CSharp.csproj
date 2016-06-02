@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Player Character\PlayerMovement.cs" />
+     <Compile Include="Assets\PrisonerExit.cs" />
      <Compile Include="Assets\Scripts\EnemyBase.cs" />
      <Compile Include="Assets\Scripts\EnemyNoFall.cs" />
      <Compile Include="Assets\Scripts\SaveFile.cs" />
