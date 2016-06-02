@@ -7,11 +7,11 @@ public class EnemyNoFall : EnemyBase
     {
         if (Grounded)
         {
-            float moveDist = speed * Time.deltaTime;
             Vector3 moveDir = direction ? Vector3.left : Vector3.right;
 
             RaycastHit2D[] hit = Physics2D.BoxCastAll(Center + Vector2.Scale(Size, new Vector2(moveDir.x * 0.45F, -0.45F)), Size*0.1F, 0, Vector2.down, Size.y * 0.5F + 0.1F)
-                .Where(h => h.collider.gameObject != gameObject)
+                .Where(h => h.collider.gameObject != gameObject
+                && !Physics2D.GetIgnoreLayerCollision(gameObject.layer, h.collider.gameObject.layer))
                 .ToArray();
 
             if (hit.Length == 0)
