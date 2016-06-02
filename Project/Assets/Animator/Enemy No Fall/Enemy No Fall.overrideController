@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Enemy No Fall
+  m_Controller: {fileID: 9100000, guid: 37d0b29712d496e489d02438b56b34be, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: abdeb4aae80032c47a8cae12da0e0495, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 69535df952950cf459712054a3c2d53b, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 4d1e461011dca2746bb8807a0189f17a, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 91ff078943f710548a4891da421b90b4, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: a834338f17c81034f87c1635742a39e8, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: a834338f17c81034f87c1635742a39e8, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 51d64504843634a4b9d3afe0609210ad, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 51d64504843634a4b9d3afe0609210ad, type: 2}
