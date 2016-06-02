@@ -57,6 +57,8 @@ public class PlayerMovement : MonoBehaviour {
         if (hit.Length > 0)
         {
             grounded = true;
+
+            jumping = jumpMax;
         }
 
     }
@@ -64,68 +66,91 @@ public class PlayerMovement : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+        RaycastHit2D[] hit = Physics2D.BoxCastAll(Center, Size, 0, Vector2.down, groundOffset)
+        .Where(h => h.collider.gameObject != self && h.normal == Vector2.up)
+        .ToArray();
+
+        grounded = false;
+
+        if (hit.Length > 0)
+        {
+            grounded = true;
+        }
+
+
         Vector2 position = self.transform.position;
         position.x += Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
 
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow) && jumping > 0)
+        if (Input.GetKey(KeyCode.W) && jumping < jumpMax)
         {
-            position.y = position.y + (jumpVelocity * Time.deltaTime);
-            jumping -= Time.deltaTime;
-
-            if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.UpArrow))
-            {
-                jumping = 0;
-            }
-
+            position.y += jumpVelocity * Time.deltaTime;
+            jumping += jumpVelocity * Time.deltaTime;
+            Debug.Log("jump");
+            
         }
-
-        if (grounded)
+        if (Input.GetKeyUp(KeyCode.W))
         {
             jumping = jumpMax;
         }
-/*
+
+
         if (grounded)
         {
-            if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.Space))
-            {
-
-                (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.Space)) && jumpModifier < 1)
-                {
-                    jumpModifier = Mathf.Lerp(0.5f, 1, 0.5f);
-                }
-                ySpeed = jumpVelocity * jumpModifier;
-                grounded = false;
-            }
+            jumping = 0;
         }
-        else
+        else if (!grounded && Input.GetKey(KeyCode.W) == false || jumping >= jumpMax)
         {
-
-            if (ySpeed - fallAcceleration * Time.deltaTime < -fallSpeedMax)
-            {
-                float timeToMax = (Mathf.Pow(fallSpeedMax, 2) - Mathf.Pow(ySpeed, 2)) / fallAcceleration * 0.5f;
-                position.y += 0.5f * fallAcceleration * Mathf.Pow(timeToMax, 2) + ySpeed * timeToMax;
-                position.y -= fallSpeedMax * (Time.deltaTime - timeToMax);
-                ySpeed = -fallSpeedMax;
-            }
-            else
-            {
-                position.y += 0.5f * fallAcceleration * Mathf.Pow(Time.deltaTime, 2) + ySpeed * Time.deltaTime;
-                ySpeed -= fallAcceleration * Time.deltaTime;
-            }
-
-            RaycastHit2D[] hit = Physics2D.BoxCastAll(Center, Size, 0, Vector2.down, groundOffset)
-            .Where(h => h.collider.gameObject != self && h.normal == Vector2.up)
-            .ToArray();
-
-            grounded = false;
-
-            if (hit.Length > 0)
-            {
-                grounded = true;
-            }
+            position.y -= jumpVelocity * Time.deltaTime;
         }
 
+
+        
+
+        
+
+        /*
+                if (grounded)
+                {
+                    if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.Space))
+                    {
+
+                        (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.Space)) && jumpModifier < 1)
+                        {
+                            jumpModifier = Mathf.Lerp(0.5f, 1, 0.5f);
+                        }
+                        ySpeed = jumpVelocity * jumpModifier;
+                        grounded = false;
+                    }
+                }
+                else
+                {
+
+                    if (ySpeed - fallAcceleration * Time.deltaTime < -fallSpeedMax)
+                    {
+                        float timeToMax = (Mathf.Pow(fallSpeedMax, 2) - Mathf.Pow(ySpeed, 2)) / fallAcceleration * 0.5f;
+                        position.y += 0.5f * fallAcceleration * Mathf.Pow(timeToMax, 2) + ySpeed * timeToMax;
+                        position.y -= fallSpeedMax * (Time.deltaTime - timeToMax);
+                        ySpeed = -fallSpeedMax;
+                    }
+                    else
+                    {
+                        position.y += 0.5f * fallAcceleration * Mathf.Pow(Time.deltaTime, 2) + ySpeed * Time.deltaTime;
+                        ySpeed -= fallAcceleration * Time.deltaTime;
+                    }
+
+                    RaycastHit2D[] hit = Physics2D.BoxCastAll(Center, Size, 0, Vector2.down, groundOffset)
+                    .Where(h => h.collider.gameObject != self && h.normal == Vector2.up)
+                    .ToArray();
+
+                    grounded = false;
+
+                    if (hit.Length > 0)
+                    {
+                        grounded = true;
+                    }
+                }
+                */
         rbSelf.MovePosition(position);
-        */
+                
     }
 }
