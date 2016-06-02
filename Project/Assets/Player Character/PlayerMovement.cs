@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
 
     bool invincible;
     float invTimer;
+    public float invDuration;
 
 
     public float jumpMax;
@@ -52,6 +53,16 @@ public class PlayerMovement : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
+
+        if (invincible)
+        {
+            invTimer -= Time.deltaTime;
+            if(invTimer == 0)
+            {
+                invincible = !invincible;
+            }
+        }
+
         Vector2 movement = Vector2.zero;
         movement.x = Input.GetAxis("Horizontal") * moveSpeed;
         animator.SetInteger(speedParameter, (int)Input.GetAxisRaw("Horizontal"));
@@ -89,6 +100,15 @@ public class PlayerMovement : MonoBehaviour
             else
             {
                 jumping = jumpMax;
+                if (!invincible)
+                {
+                    foreach (EnemyBase enemy in enemies)
+                    {
+                        score -= enemy.gameObject.GetComponent<EnemyBase>().scorePenalty;
+                    }
+                    invincible = true;
+                    invTimer = invDuration;
+                }
             }
 
             movement.y = distanceTo;
@@ -96,6 +116,15 @@ public class PlayerMovement : MonoBehaviour
 
         if (BoxCast(Vector2.right, movement.x, out distanceTo, out enemies))
         {
+            if (!invincible)
+            {
+                foreach (EnemyBase enemy in enemies)
+                {
+                    score -= enemy.gameObject.GetComponent<EnemyBase>().scorePenalty;
+                }
+                invincible = true;
+                invTimer = invDuration;
+            }
             movement.x = distanceTo;
         }
 
