@@ -12,7 +12,7 @@ GameObject:
   - 61: {fileID: 6109694}
   - 114: {fileID: 11402106}
   - 95: {fileID: 9594878}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Enemy No Fall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
