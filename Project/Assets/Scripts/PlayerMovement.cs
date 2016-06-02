@@ -186,7 +186,7 @@ public class PlayerMovement : MonoBehaviour
         return true;
     }
 
-    private void Damage(EnemyBase enemy)
+    public void Damage(EnemyBase enemy)
     {
         if (invincible) return;
 

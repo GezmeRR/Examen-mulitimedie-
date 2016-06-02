@@ -81,6 +81,13 @@ public class EnemyBase : MonoBehaviour
 
     protected bool CanCollide(Collider2D collider)
     {
-        return collider.gameObject != gameObject && !collider.isTrigger && !Physics2D.GetIgnoreLayerCollision(gameObject.layer, collider.gameObject.layer);
+        if (collider.gameObject == gameObject || collider.isTrigger)
+            return false;
+
+        PlayerMovement player = collider.GetComponent<PlayerMovement>();
+
+        if (player) player.Damage(this);
+
+        return !Physics2D.GetIgnoreLayerCollision(gameObject.layer, collider.gameObject.layer);
     }
 }
