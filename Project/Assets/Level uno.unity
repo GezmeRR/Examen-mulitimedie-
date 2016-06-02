@@ -1901,6 +1901,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 381348260}
   - 82: {fileID: 381348259}
+  - 95: {fileID: 381348261}
   m_Layer: 0
   m_Name: 583171_Quarter-Hill---8-bit (1)
   m_TagString: Untagged
@@ -1995,6 +1996,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 258
+--- !u!95 &381348261
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 381348258}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: bf1b77bbb0fe73346826ff3e876448df, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!1 &385898383 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 182800, guid: fdca2b1efca9c9e48bbd7c7e12c8ffd0, type: 2}
