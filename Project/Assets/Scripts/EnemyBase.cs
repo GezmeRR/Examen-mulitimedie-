@@ -1,27 +1,42 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using UnityEngine;
 
+[RequireComponent(typeof(BoxCollider2D), typeof(Animator))]
 public class EnemyBase : MonoBehaviour
 {
     public float fallSpeed;
     public float speed;
     public bool direction;
+    public AnimationParameters animationParameters = new AnimationParameters { direction = "Direction", grounded = "Grounded" };
 
     private BoxCollider2D col;
+    private Animator animator;
     protected bool Grounded { get; private set; }
 
     protected Vector2 Center { get { return (Vector2)transform.position + Vector2.Scale(col.offset, transform.localScale); } }
     protected Vector2 Size { get { return Vector2.Scale(col.size, transform.localScale); } }
 
+    [Serializable]
+    public struct AnimationParameters
+    {
+        public string direction;
+        public string grounded;
+    }
+
     void Start()
     {
         col = GetComponent<BoxCollider2D>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
     {
         Fall();
         Move();
+
+        animator.SetBool(animationParameters.direction, direction);
+        animator.SetBool(animationParameters.grounded, Grounded);
     }
 
     void Fall()

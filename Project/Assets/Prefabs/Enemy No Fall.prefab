@@ -11,6 +11,7 @@ GameObject:
   - 212: {fileID: 21288816}
   - 61: {fileID: 6109694}
   - 114: {fileID: 11402106}
+  - 95: {fileID: 9594878}
   m_Layer: 0
   m_Name: Enemy No Fall
   m_TagString: Untagged
@@ -45,6 +46,23 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
+--- !u!95 &9594878
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 146710}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 37d0b29712d496e489d02438b56b34be, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &11402106
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -59,6 +77,9 @@ MonoBehaviour:
   fallSpeed: 2
   speed: 1
   direction: 0
+  animationParameters:
+    direction: Direction
+    grounded: Grounded
 --- !u!212 &21288816
 SpriteRenderer:
   m_ObjectHideFlags: 1
