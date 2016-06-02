@@ -48,6 +48,7 @@
      <Compile Include="Assets\Player Character\PlayerMovement.cs" />
      <Compile Include="Assets\Scripts\EnemyBase.cs" />
      <Compile Include="Assets\Scripts\EnemyNoFall.cs" />
+     <Compile Include="Assets\Scripts\HUD.cs" />
      <Compile Include="Assets\Scripts\PrisonerExit.cs" />
      <Compile Include="Assets\Scripts\SaveFile.cs" />
      <Compile Include="Assets\Scripts\Spawner.cs" />
