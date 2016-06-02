@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class PrisonerExit : MonoBehaviour {
 
@@ -36,8 +36,16 @@ public class PrisonerExit : MonoBehaviour {
             //same damage for all
             damage++;
             score -= scorePenalty;
-            source.clip = damageClips[Random.Range(0, damageClips.Length)];
-            source.Play();
+
+            if (damage >= health)
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            }
+            else
+            {
+                source.clip = damageClips[Random.Range(0, damageClips.Length)];
+                source.Play();
+            }
         }
 	}
 }
