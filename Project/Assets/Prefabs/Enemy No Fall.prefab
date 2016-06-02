@@ -80,6 +80,8 @@ MonoBehaviour:
   animationParameters:
     direction: Direction
     grounded: Grounded
+  scoreVal: 50
+  scorePenalty: 200
 --- !u!212 &21288816
 SpriteRenderer:
   m_ObjectHideFlags: 1
