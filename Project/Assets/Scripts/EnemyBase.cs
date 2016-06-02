@@ -4,8 +4,14 @@ using UnityEngine;
 public class EnemyBase : MonoBehaviour
 {
     public float fallSpeed;
+    public float speed;
+    public bool direction;
 
     private BoxCollider2D col;
+    private bool grounded;
+
+    private Vector2 Center { get { return (Vector2)transform.position + Vector2.Scale(col.offset, transform.localScale); } }
+    private Vector2 Size { get { return Vector2.Scale(col.size, transform.localScale); } }
 
     void Start()
     {
@@ -14,25 +20,44 @@ public class EnemyBase : MonoBehaviour
 
     void Update()
     {
-        Vector2 position = transform.position;
-        Vector2 scale = transform.localScale;
-
-        Vector2 center = position + Vector2.Scale(col.offset, scale);
-        Vector2 size = Vector2.Scale(col.size, scale);
-
-        Fall(center, size);
+        Fall();
+        Move();
     }
 
-    void Fall(Vector2 center, Vector2 size)
+    void Fall()
     {
         float fallDist = fallSpeed * Time.deltaTime;
-        RaycastHit2D[] hit = Physics2D.BoxCastAll(center, size, 0, Vector2.down, fallDist);
+        
+        RaycastHit2D[] hit = Physics2D.BoxCastAll(Center, Size, 0, Vector2.down, fallDist)
+            .Where(h => h.collider.gameObject != gameObject && h.normal == Vector2.up)
+            .ToArray();
 
-        if (hit.Length > 1)
+        grounded = false;
+
+        if (hit.Length > 0)
         {
-            fallDist = hit.First(h => h.collider.gameObject != gameObject).distance;
+            fallDist = hit[0].distance;
+            grounded = true;
         }
 
-        transform.position += Vector3.down * fallDist;
+        transform.position += fallDist * Vector3.down;
+    }
+
+    void Move()
+    {
+        float moveDist = speed * Time.deltaTime;
+        Vector3 moveDir = direction ? Vector3.left : Vector3.right;
+
+        RaycastHit2D[] hit = Physics2D.BoxCastAll(Center, Size, 0, moveDir, moveDist)
+            .Where(h => h.collider.gameObject != gameObject && h.normal == -(Vector2)moveDir)
+            .ToArray();
+
+        if (hit.Length > 0)
+        {
+            moveDist = hit[0].distance;
+            direction = !direction;
+        }
+
+        transform.position += moveDist * moveDir;
     }
 }
