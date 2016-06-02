@@ -23,7 +23,7 @@ public class SaveFile
 
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create(string.Format("{0}/HighScore.sav", Application.persistentDataPath));
-        bf.Serialize(file, save);
+        bf.Serialize(file, this);
         file.Close();
     }
 
@@ -35,8 +35,10 @@ public class SaveFile
         {
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open(fileName, FileMode.Open);
-            save = (SaveFile)bf.Deserialize(file);
+            SaveFile save = (SaveFile)bf.Deserialize(file);
             file.Close();
+
+            scores = save.scores;
         }
     }
 }
