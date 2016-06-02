@@ -19,9 +19,6 @@ public class SaveFile
 
     public void Save()
     {
-        if (!Directory.Exists(Application.persistentDataPath + "/Saves"))
-            Directory.CreateDirectory(Application.persistentDataPath + "/Saves");
-
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create(string.Format("{0}/HighScore.sav", Application.persistentDataPath));
         bf.Serialize(file, this);
@@ -30,7 +27,7 @@ public class SaveFile
 
     public void Load()
     {
-        string fileName = string.Format("{0}/Saves/HighScore.sav", Application.persistentDataPath);
+        string fileName = string.Format("{0}/HighScore.sav", Application.persistentDataPath);
 
         if (File.Exists(fileName))
         {
